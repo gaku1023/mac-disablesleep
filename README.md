@@ -103,3 +103,7 @@ removes the app, clears its preferences, and removes the sudoers rule.
 ## License
 
 [MIT](LICENSE)
+
+---
+
+Enjoy vibe coding 😎
