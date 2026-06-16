@@ -53,9 +53,9 @@ echo " from the menu's \"Launch at login\" item.)"
 
 # Offer to launch now. Default Yes; skip silently if not interactive.
 if [[ -t 0 ]]; then
-    read -r -p "今すぐ DisableSleep を起動しますか? [Y/n] " answer
+    read -r -p "Launch DisableSleep now? [Y/n] " answer
     case "$answer" in
-        [nN]*) echo "後で /Applications や Spotlight から起動できます。" ;;
-        *)     open -a DisableSleep && echo "起動しました。" ;;
+        [nN]*) echo "You can launch it later from /Applications or Spotlight." ;;
+        *)     open -a DisableSleep && echo "Launched." ;;
     esac
 fi

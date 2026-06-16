@@ -10,10 +10,10 @@ BUNDLE_ID="co.alphatique.disablesleep"
 
 # Confirm before doing anything destructive (interactive only).
 if [[ -t 0 ]]; then
-    read -r -p "DisableSleep をアンインストールします。よろしいですか? [y/N] " answer
+    read -r -p "Uninstall DisableSleep? [y/N] " answer
     case "$answer" in
         [yY]*) ;;
-        *) echo "中止しました。"; exit 0 ;;
+        *) echo "Cancelled."; exit 0 ;;
     esac
 fi
 
