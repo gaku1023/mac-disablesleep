@@ -12,14 +12,20 @@ final class LoginItem: ObservableObject {
     @Published private(set) var isEnabled = false
 
     private let service = SMAppService.mainApp
-    private let defaultsKey = "didSetDefaultLoginItem"
 
     init() {
         refresh()
-        if !UserDefaults.standard.bool(forKey: defaultsKey) {
-            setEnabled(true)
-            UserDefaults.standard.set(true, forKey: defaultsKey)
-        }
+    }
+
+    /// Enable launch-at-login once, on the first ever run. Called eagerly from
+    /// `DisableSleepApp.init()` — NOT from this object's `init` — because the
+    /// `@StateObject` is created lazily (only when the menu is first opened),
+    /// which would otherwise delay the default registration indefinitely.
+    nonisolated static func enableByDefaultOnFirstRun() {
+        let key = "didSetDefaultLoginItem"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        try? SMAppService.mainApp.register()
+        UserDefaults.standard.set(true, forKey: key)
     }
 
     func refresh() {

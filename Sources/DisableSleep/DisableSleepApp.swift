@@ -13,6 +13,11 @@ struct Entry {
             try? SMAppService.mainApp.unregister()
             return
         }
+        if CommandLine.arguments.contains("--status") {
+            // Diagnostic: 0=notRegistered 1=enabled 2=requiresApproval 3=notFound
+            print("login item status: \(SMAppService.mainApp.status.rawValue)")
+            return
+        }
         DisableSleepApp.main()
     }
 }
@@ -20,6 +25,10 @@ struct Entry {
 struct DisableSleepApp: App {
     @StateObject private var controller = SleepController()
     @StateObject private var loginItem = LoginItem()
+
+    init() {
+        LoginItem.enableByDefaultOnFirstRun()
+    }
 
     var body: some Scene {
         MenuBarExtra {
