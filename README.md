@@ -58,6 +58,10 @@ icon to disable / allow sleep.
 
 - Reads state with `pmset -g` (parses the `SleepDisabled` line).
 - Writes state with `sudo -n /usr/bin/pmset -a disablesleep {0,1}`.
+- **Quitting the app (or logging out) automatically restores normal sleep**
+  (`disablesleep 0`), so the setting never gets stuck if you close the app or
+  drag it to the Trash while sleep is disabled. Sleep stays disabled only while
+  the app is running.
 - The installer adds this single line to `/etc/sudoers.d/mac-disablesleep`:
 
   ```

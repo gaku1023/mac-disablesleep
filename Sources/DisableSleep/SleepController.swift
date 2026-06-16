@@ -16,7 +16,6 @@ final class SleepController: ObservableObject {
     @Published private(set) var needsSetup = false
 
     private let pmset = "/usr/bin/pmset"
-    private let sudo = "/usr/bin/sudo"
 
     init() {
         refresh()
@@ -37,10 +36,27 @@ final class SleepController: ObservableObject {
     }
 
     func setDisabled(_ on: Bool) {
-        let result = run(sudo, ["-n", pmset, "-a", "disablesleep", on ? "1" : "0"])
+        let status = Self.applyDisableSleep(on)
         // exit 1 from `sudo -n` means the NOPASSWD rule is not configured.
-        needsSetup = result.status != 0
+        needsSetup = status != 0
         refresh()
+    }
+
+    /// Runs `sudo -n pmset -a disablesleep {0,1}` and returns the exit status.
+    /// `nonisolated` + `static` so it can be called from the app's terminate
+    /// handler (to restore normal sleep on quit) without touching the actor.
+    @discardableResult
+    nonisolated static func applyDisableSleep(_ on: Bool) -> Int32 {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/sudo")
+        process.arguments = ["-n", "/usr/bin/pmset", "-a", "disablesleep", on ? "1" : "0"]
+        do {
+            try process.run()
+            process.waitUntilExit()
+            return process.terminationStatus
+        } catch {
+            return -1
+        }
     }
 
     private func run(_ launchPath: String, _ args: [String]) -> (output: String, status: Int32) {

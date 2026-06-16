@@ -22,7 +22,16 @@ struct Entry {
     }
 }
 
+/// Restores normal sleep when the app quits, so disabling sleep never "sticks"
+/// after the app is closed, logged out, or dragged to the Trash mid-session.
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationWillTerminate(_ notification: Notification) {
+        SleepController.applyDisableSleep(false)
+    }
+}
+
 struct DisableSleepApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var controller = SleepController()
     @StateObject private var loginItem = LoginItem()
 
