@@ -1,0 +1,5 @@
+.build/
+DisableSleep.app/
+*.xcodeproj
+.DS_Store
+.swiftpm/
