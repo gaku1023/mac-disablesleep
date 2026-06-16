@@ -8,14 +8,29 @@ DisableSleep は対象コマンドだけに絞ったパスワード不要の `su
 
 ## アイコン
 
-メニューバーに 太陽(`☀︎`) / 月(`🌙`) のアイコンが出ます。太陽 = スリープ無効（起きたまま）、月 = 通常。
+**メニューバー**に 太陽(`☀︎`) / 月(`🌙`) のアイコンが出ます。太陽 = スリープ無効（起きたまま）、月 = 通常。
+Dock にはアイコンを出しません（メニューバー常駐アプリのため）。三日月のアプリアイコンは Finder / Spotlight で表示されます。
 
 ## 動作要件
 
 - macOS 13 (Ventura) 以降
-- ソースからビルドするための Xcode コマンドラインツール（`xcode-select --install`）
+- Xcode コマンドラインツール（`xcode-select --install`）※ソースからビルドする場合のみ
 
-## インストール
+## インストール（ビルド済み版・最も簡単）
+
+[最新リリース](https://github.com/gaku1023/mac-disablesleep/releases/latest)から
+`DisableSleep.zip` をダウンロードして展開し、次を実行:
+
+```sh
+xattr -dr com.apple.quarantine DisableSleep.app   # 未署名アプリの検疫フラグを解除
+mv DisableSleep.app /Applications/
+curl -fsSL https://raw.githubusercontent.com/gaku1023/mac-disablesleep/main/setup-permissions.sh | bash
+open -a DisableSleep
+```
+
+`setup-permissions.sh` がパスワード不要の sudo ルールを追加します（一度だけパスワードを聞かれます）。
+
+## インストール（ソースから）
 
 ```sh
 git clone https://github.com/gaku1023/mac-disablesleep.git
@@ -65,6 +80,15 @@ pmset -g | grep SleepDisabled  # 現在の状態を確認
 
 確認のうえ、通常スリープに戻し、ログイン項目を解除し、アプリと設定、
 sudoers ルールを削除します。
+
+## 補足・トラブルシューティング
+
+- **初回起動で「開けません」と出る** — 未署名のためです。アプリを右クリック →**開く**、
+  または `xattr -dr com.apple.quarantine /Applications/DisableSleep.app` を実行。
+- **ログイン項目の承認を求められる** — 未署名アプリだと、システム設定 → 一般 →
+  ログイン項目に「要承認」として出ることがあります。出たらそこで有効化してください。
+- **インストール後にアイコンが古い/汎用のまま** — Finder/Dock のアイコンキャッシュです。
+  再ログインすれば（または時間が経てば）三日月アイコンに更新されます。
 
 ## セキュリティについて
 

@@ -1,0 +1,44 @@
+name: release
+
+# Push a tag like v1.0.0 to build the app and publish a GitHub Release
+# with a downloadable DisableSleep.zip attached.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build app bundle
+        run: ./build.sh
+
+      - name: Zip app (preserve bundle + signature)
+        run: ditto -c -k --sequesterRsrc --keepParent DisableSleep.app DisableSleep.zip
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: DisableSleep.zip
+          generate_release_notes: true
+          body: |
+            ## Install (prebuilt)
+
+            ```sh
+            # 1. Download & unzip DisableSleep.zip (attached below), then:
+            xattr -dr com.apple.quarantine DisableSleep.app   # unsigned app
+            mv DisableSleep.app /Applications/
+
+            # 2. Grant the password-free sudo rule for the toggle:
+            curl -fsSL https://raw.githubusercontent.com/gaku1023/mac-disablesleep/main/setup-permissions.sh | bash
+
+            # 3. Launch it:
+            open -a DisableSleep
+            ```
+
+            Prefer building from source? See the [README](https://github.com/gaku1023/mac-disablesleep#readme).

@@ -7,7 +7,7 @@
     <key>CFBundleDisplayName</key>
     <string>DisableSleep</string>
     <key>CFBundleIdentifier</key>
-    <string>co.alphatique.disablesleep</string>
+    <string>io.github.gaku1023.disablesleep</string>
     <key>CFBundleExecutable</key>
     <string>DisableSleep</string>
     <key>CFBundleIconFile</key>

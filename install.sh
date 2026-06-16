@@ -10,10 +10,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 APP_NAME="DisableSleep.app"
 DEST="/Applications/$APP_NAME"
-SUDOERS_FILE="/etc/sudoers.d/mac-disablesleep"
-USER_NAME="$(whoami)"
 
-if [[ "$USER_NAME" == "root" ]]; then
+if [[ "$(whoami)" == "root" ]]; then
     echo "Please run install.sh as your normal user, not with sudo." >&2
     exit 1
 fi
@@ -26,24 +24,8 @@ echo "==> Installing to $DEST"
 rm -rf "$DEST"
 cp -R "$ROOT/$APP_NAME" "$DEST"
 
-# 3. Add the NOPASSWD rule, scoped to exactly the two commands we run.
-echo "==> Configuring sudoers (requires admin password)"
-TMP="$(mktemp)"
-cat > "$TMP" <<EOF
-# Added by mac-disablesleep installer.
-# Allows $USER_NAME to toggle pmset disablesleep without a password.
-$USER_NAME ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep 0, /usr/bin/pmset -a disablesleep 1
-EOF
-
-# Validate syntax before installing — never write a broken sudoers file.
-if ! sudo visudo -cf "$TMP" >/dev/null; then
-    echo "sudoers validation failed; aborting." >&2
-    rm -f "$TMP"
-    exit 1
-fi
-
-sudo install -m 0440 -o root -g wheel "$TMP" "$SUDOERS_FILE"
-rm -f "$TMP"
+# 3. Add the NOPASSWD sudoers rule (shared with the prebuilt path).
+"$ROOT/setup-permissions.sh"
 
 echo ""
 echo "Done. DisableSleep is installed."

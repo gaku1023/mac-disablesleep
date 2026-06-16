@@ -6,7 +6,7 @@ set -euo pipefail
 DEST="/Applications/DisableSleep.app"
 BIN="$DEST/Contents/MacOS/DisableSleep"
 SUDOERS_FILE="/etc/sudoers.d/mac-disablesleep"
-BUNDLE_ID="co.alphatique.disablesleep"
+BUNDLE_ID="io.github.gaku1023.disablesleep"
 
 # Confirm before doing anything destructive (interactive only).
 if [[ -t 0 ]]; then
