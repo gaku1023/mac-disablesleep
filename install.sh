@@ -46,5 +46,16 @@ sudo install -m 0440 -o root -g wheel "$TMP" "$SUDOERS_FILE"
 rm -f "$TMP"
 
 echo ""
-echo "Done. Launch DisableSleep from /Applications (or Spotlight)."
+echo "Done. DisableSleep is installed."
 echo "A sun/moon icon appears in the menu bar — click it to toggle."
+echo "(It will also launch automatically at login by default; toggle that"
+echo " from the menu's \"Launch at login\" item.)"
+
+# Offer to launch now. Default Yes; skip silently if not interactive.
+if [[ -t 0 ]]; then
+    read -r -p "今すぐ DisableSleep を起動しますか? [Y/n] " answer
+    case "$answer" in
+        [nN]*) echo "後で /Applications や Spotlight から起動できます。" ;;
+        *)     open -a DisableSleep && echo "起動しました。" ;;
+    esac
+fi

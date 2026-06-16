@@ -26,6 +26,10 @@ cd mac-disablesleep
 `DisableSleep.app` をビルドして `/Applications` にコピーし、パスワード不要で
 切り替えられるよう sudoers ルールを追加します。
 
+インストール後に「今すぐ起動しますか?」と聞かれます。また DisableSleep は
+**デフォルトでログイン時に自動起動**します（`SMAppService` を使用）。これは
+メニューの **「Launch at login」** 項目でオフにできます。
+
 Spotlight か `/Applications` から **DisableSleep** を起動し、メニューバーの
 アイコンをクリックして スリープ無効 / 通常 を切り替えてください。
 

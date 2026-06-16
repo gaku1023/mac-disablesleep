@@ -30,6 +30,10 @@ cd mac-disablesleep
 This builds `DisableSleep.app`, copies it to `/Applications`, and adds a sudoers
 rule so the toggle works without a password.
 
+The installer then asks whether to launch the app now. DisableSleep also
+**starts automatically at login by default** (via `SMAppService`); you can turn
+that off from the menu's **Launch at login** item.
+
 Launch **DisableSleep** from Spotlight or `/Applications`. Click the menu bar
 icon to disable / allow sleep.
 
