@@ -1,6 +1,22 @@
+import ServiceManagement
 import SwiftUI
 
+/// Custom entry point so the uninstaller can cleanly remove the login item.
+///
+/// `DisableSleep --unregister` deregisters the SMAppService login item and
+/// exits without showing the menu bar UI, so deleting the app bundle never
+/// leaves an orphaned entry in System Settings → Login Items.
 @main
+struct Entry {
+    static func main() {
+        if CommandLine.arguments.contains("--unregister") {
+            try? SMAppService.mainApp.unregister()
+            return
+        }
+        DisableSleepApp.main()
+    }
+}
+
 struct DisableSleepApp: App {
     @StateObject private var controller = SleepController()
     @StateObject private var loginItem = LoginItem()

@@ -10,6 +10,8 @@
     <string>co.alphatique.disablesleep</string>
     <key>CFBundleExecutable</key>
     <string>DisableSleep</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>

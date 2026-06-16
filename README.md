@@ -66,7 +66,8 @@ pmset -g | grep SleepDisabled  # check current state
 ./uninstall.sh
 ```
 
-Restores normal sleep, removes the app and the sudoers rule.
+Asks for confirmation, then restores normal sleep, deregisters the login item,
+removes the app, clears its preferences, and removes the sudoers rule.
 
 ## Security notes
 
